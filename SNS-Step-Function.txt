@@ -1,0 +1,26 @@
+# Before you start executing this code in your step function make Sure
+to create a subscription in your aws-sns
+
+{
+  "Comment": "Transaction Processor State Machine Using SNS",
+  "StartAt": "ProcessTransaction",
+  "States": {
+    "ProcessTransaction": {
+      "Type": "Pass",
+      "Next": "BroadcastToSns"
+    },
+    "BroadcastToSns": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "YOUR-SNS-TOPIC-ARN",
+        "Message": {
+          "TransactionId.$": "$.TransactionId",
+          "Type.$": "$.Type",
+          "Source": "Step Functions!"
+        }
+      },
+      "End": true
+    }
+  }
+}
