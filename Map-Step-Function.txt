@@ -1,0 +1,27 @@
+{
+  "StartAt": "ValidateAll",
+  "States": {
+    "ValidateAll": {
+      "Type": "Map",
+      "InputPath": "$",
+      "ItemsPath": "$.transactions",
+      "MaxConcurrency": 3,
+      "Iterator": {
+        "StartAt": "Validate",
+        "States": {
+          "Validate": {
+            "Type": "Task",
+            "Resource": "YOUR-LAMBDA-ARN",
+            "Next": "Complete"
+          },
+          "Complete": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      },
+      "ResultPath": "$.ValidateAll",
+      "End": true
+    }
+  }
+}
